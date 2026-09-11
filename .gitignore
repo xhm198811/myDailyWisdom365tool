@@ -1,0 +1,12 @@
+server/.env
+server/.env.*
+!server/.env.example
+server/.venv/
+server/venv/
+__pycache__/
+*.py[cod]
+.workbuddy/
+miniprogram/node_modules/
+miniprogram/miniprogram_npm/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,15 @@
+{
+  "pages": [
+    "pages/index/index"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#f2f4f7",
+    "navigationBarTitleText": "晨间问候",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f2f4f7",
+    "backgroundTextStyle": "dark",
+    "enablePullDownRefresh": true
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

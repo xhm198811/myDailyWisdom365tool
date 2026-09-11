@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>晨间问候 · 小程序展示页预览</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #e9ecf1;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: #1f2329;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px 48px;
+  }
+  .hint-top { font-size: 13px; color: #6b7280; margin-bottom: 20px; text-align: center; line-height: 1.7; }
+  .hint-top code { background: #fff; padding: 2px 6px; border-radius: 4px; font-size: 12px; color: #c0392b; }
+
+  .phone {
+    width: 375px;
+    background: #f2f4f7;
+    border-radius: 40px;
+    box-shadow: 0 20px 60px rgba(31,35,41,.18), 0 0 0 10px #1f2329;
+    overflow: hidden;
+  }
+  .statusbar { height: 44px; background: #f2f4f7; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; font-size: 13px; color: #1f2329; }
+  .navbar { height: 44px; background: #f2f4f7; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500; }
+  .viewport { padding: 12px 12px 24px; min-height: 600px; }
+
+  .notice { margin-bottom: 8px; padding: 8px 12px; border-radius: 8px; background: #fff4e5; color: #a35b00; font-size: 12px; line-height: 1.5; display: none; }
+  .notice.show { display: block; }
+
+  .card { background: #fff; border-radius: 14px; padding: 16px; margin-bottom: 12px; box-shadow: 0 4px 16px rgba(31,35,41,.06); }
+  .date-hero { display: flex; align-items: baseline; gap: 10px; }
+  .date-md { font-size: 38px; font-weight: 600; color: #1f2329; line-height: 1.1; }
+  .date-week { font-size: 15px; color: #5f6672; }
+  .date-sub { margin-top: 6px; font-size: 14px; color: #3d4450; line-height: 1.6; }
+  .date-sub.dim { color: #8f959e; font-size: 13px; }
+  .tags { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { padding: 4px 10px; border-radius: 999px; font-size: 12px; background: #f2f4f7; color: #5f6672; }
+  .tag.festival { background: #fdecec; color: #c0392b; }
+  .tag.term { background: #e7f4ec; color: #2e7d54; }
+  .tag.weekend { background: #e8f0fd; color: #2c5fb3; }
+  .tag.workday { background: #f2f4f7; color: #5f6672; }
+  .tag.holiday { background: #fdecec; color: #c0392b; }
+  .tag.makeup_workday { background: #fff3e0; color: #a35b00; }
+  .meta { margin-top: 9px; display: flex; font-size: 13px; }
+  .meta-k { color: #8f959e; margin-right: 8px; min-width: 65px; }
+  .meta-v { color: #3d4450; }
+
+  .w-hero { display: flex; align-items: center; }
+  .w-emoji { font-size: 44px; line-height: 1; margin-right: 12px; }
+  .w-main { flex: 1; }
+  .w-line { display: flex; align-items: baseline; gap: 3px; }
+  .w-temp { font-size: 34px; font-weight: 600; color: #1f2329; line-height: 1; }
+  .w-deg { font-size: 17px; color: #1f2329; }
+  .w-text { font-size: 15px; color: #5f6672; margin-left: 8px; }
+  .w-range { margin-top: 5px; font-size: 13px; color: #8f959e; }
+  .w-city { text-align: right; }
+  .w-city-name { display: block; font-size: 14px; color: #3d4450; }
+  .w-city-hint { display: block; margin-top: 3px; font-size: 11px; color: #b0b6bf; }
+  .w-grid { margin-top: 14px; padding-top: 12px; border-top: 1px solid #f2f4f7; display: flex; }
+  .w-item { flex: 1; text-align: center; }
+  .w-k { display: block; font-size: 12px; color: #8f959e; }
+  .w-v { display: block; margin-top: 4px; font-size: 14px; color: #3d4450; }
+  .w-tips { margin-top: 12px; padding: 9px 11px; background: #f7f9fc; border-radius: 8px; font-size: 12.5px; color: #5f6672; line-height: 1.6; }
+
+  .card.greeting { background: #fffdf7; }
+  .g-hello { font-size: 13px; color: #b08a4a; letter-spacing: 2px; }
+  .g-text { margin-top: 8px; font-size: 17px; line-height: 1.75; color: #2f333a; }
+  .g-actions { margin-top: 16px; display: flex; gap: 10px; }
+  .g-btn { flex: 1; border: none; background: #fdf6e8; color: #8a6a33; border-radius: 999px; padding: 9px 0; font-size: 13px; cursor: pointer; font-family: inherit; }
+  .g-btn.plain { background: #fff; border: 1px solid #ece3d2; }
+  .g-btn:disabled { opacity: .6; cursor: default; }
+
+  .degraded { display: flex; align-items: center; padding: 0 4px; font-size: 11px; color: #a8aeb8; }
+  .degraded .dot { width: 6px; height: 6px; border-radius: 50%; background: #f0a020; margin-right: 6px; }
+
+  .legend { margin-top: 28px; max-width: 560px; font-size: 13px; color: #4b5563; line-height: 1.9; }
+  .legend h3 { font-size: 14px; font-weight: 600; color: #1f2329; margin-bottom: 6px; }
+  .legend code { background: #fff; padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+  .legend .row { display: flex; gap: 10px; }
+  .legend .k { color: #8f959e; min-width: 92px; }
+</style>
+</head>
+<body>
+
+<p class="hint-top">
+  小程序展示页预览 · 数据实时取自 <code>GET /api/v1/today</code><br>
+  若后端未启动（<code>uvicorn app.main:app --port 8123</code>），下方会显示内置示例数据
+</p>
+
+<div class="phone">
+  <div class="statusbar"><span>9:41</span><span>▪▪▪ 100%</span></div>
+  <div class="navbar">晨间问候</div>
+  <div class="viewport">
+    <div class="notice" id="notice"></div>
+
+    <div class="card">
+      <div class="date-hero">
+        <span class="date-md" id="d-md">—</span>
+        <span class="date-week" id="d-week"></span>
+      </div>
+      <div class="date-sub" id="d-lunar"></div>
+      <div class="date-sub dim" id="d-ganzhi"></div>
+      <div class="tags" id="d-tags"></div>
+      <div class="meta" id="d-term" style="display:none">
+        <span class="meta-k">下一节气</span><span class="meta-v" id="d-term-v"></span>
+      </div>
+      <div class="meta" id="d-holiday" style="display:none">
+        <span class="meta-k">假期倒计时</span><span class="meta-v" id="d-holiday-v"></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="w-hero">
+        <span class="w-emoji" id="w-emoji">🌈</span>
+        <div class="w-main">
+          <div class="w-line">
+            <span class="w-temp" id="w-temp">--</span>
+            <span class="w-deg">°</span>
+            <span class="w-text" id="w-text"></span>
+          </div>
+          <div class="w-range" id="w-range"></div>
+        </div>
+        <div class="w-city">
+          <span class="w-city-name" id="w-city"></span>
+          <span class="w-city-hint">点击切换</span>
+        </div>
+      </div>
+      <div class="w-grid">
+        <div class="w-item"><span class="w-k">湿度</span><span class="w-v" id="w-hum"></span></div>
+        <div class="w-item"><span class="w-k" id="w-windk"></span><span class="w-v" id="w-windv"></span></div>
+        <div class="w-item"><span class="w-k">空气</span><span class="w-v" id="w-aqi"></span></div>
+      </div>
+      <div class="w-tips" id="w-tips"></div>
+    </div>
+
+    <div class="card greeting">
+      <div class="g-hello" id="g-hello">早安</div>
+      <div class="g-text" id="g-text">加载中…</div>
+      <div class="g-actions">
+        <button class="g-btn" id="btn-new">换一句</button>
+        <button class="g-btn plain">分享</button>
+      </div>
+    </div>
+
+    <div class="degraded" id="degraded" style="display:none">
+      <span class="dot"></span><span id="degraded-text"></span>
+    </div>
+  </div>
+</div>
+
+<div class="legend">
+  <h3>数据来源</h3>
+  <div class="row"><span class="k">日期 / 农历</span><span>后端离线算法（<code>lunardate</code> + 自建节气天文算法），已用 2024 年官方时刻全表校准，日期 24/24 正确</span></div>
+  <div class="row"><span class="k">节气</span><span>计算太阳视黄经后二分求解，误差 ≤ 9 分钟，不依赖第三方 API</span></div>
+  <div class="row"><span class="k">节假日 / 调休</span><span>Supabase <code>holidays</code> 表，按国务院年度公告维护，每年更新一次</span></div>
+  <div class="row"><span class="k">天气</span><span>和风天气 devapi，两级缓存；未配置 Key 时降级为示例数据</span></div>
+  <div class="row"><span class="k">敬语</span><span>Supabase <code>greetings</code> 表，按场景加权随机</span></div>
+</div>
+
+<script>
+const API = 'http://127.0.0.1:8123/api/v1';
+const CITY = '宁波';
+const EMOJI = {100:'☀️',101:'🌤️',102:'⛅',103:'⛅',104:'☁️',150:'🌙',151:'🌙',152:'🌙',153:'🌙',
+  300:'🌦️',301:'🌧️',302:'⛈️',303:'⛈️',304:'⛈️',305:'🌧️',306:'🌧️',307:'🌧️',308:'🌧️',309:'🌧️',
+  310:'🌧️',311:'🌧️',312:'🌧️',313:'🌧️',314:'🌧️',315:'🌧️',316:'🌧️',317:'🌧️',318:'🌧️',
+  350:'🌧️',351:'🌧️',399:'🌧️',400:'🌨️',401:'🌨️',402:'❄️',403:'❄️',404:'🌨️',405:'🌨️',406:'🌨️',
+  407:'🌨️',408:'🌨️',409:'🌨️',410:'🌨️',500:'🌫️',501:'🌫️',502:'🌫️',503:'🌫️',504:'🌫️',
+  507:'🌫️',508:'🌫️',509:'🌫️',510:'🌫️',511:'🌫️',512:'🌫️',513:'🌫️',514:'🌫️',515:'🌫️',
+  900:'🌡️',901:'❄️',999:'🌈'};
+
+const FALLBACK = {"ok":true,"data":{"date":{"date":"2026-09-10","weekday":"星期四","weekday_index":3,"day_type":"workday","day_type_label":"工作日","holiday_name":null,"festivals":["教师节"],"solar_term":null,"is_day_off":false,"next_holiday":null,"lunar":{"year":2026,"month":7,"day":29,"is_leap_month":false,"month_cn":"七月","day_cn":"廿九","year_cn":"丙午年","zodiac":"马"},"ganzhi_day":"丁亥","next_solar_term":{"name":"秋分","date":"2026-09-23","days":13},"solar":{"year":2026,"month":9,"day":10}},"weather":{"city":"宁波","text":"中雨","icon":"306","temp":19,"feels_like":20,"temp_min":18,"temp_max":22,"humidity":76,"wind_dir":"东南风","wind_scale":"3级","precip":0,"aqi":60,"aqi_category":"优","tips":"雨势明显，路面湿滑，注意安全。","sunrise":"05:32","sunset":"18:20","uv_index":"5","is_rainy":true,"source":"mock","obs_time":"2026-09-10T14:55+08:00","cached":false},"greeting":{"content":"今日教师节。愿你平安喜乐，诸事顺遂。","category":"festival","source":"builtin"},"tone":"classic"},"degraded":["database","weather"],"generated_at":"2026-09-10T14:55:04+08:00"};
+
+function timeGreeting(h){if(h<5)return '夜深了';if(h<9)return '早安';if(h<12)return '上午好';if(h<14)return '午安';if(h<18)return '下午好';if(h<23)return '晚上好';return '夜深了';}
+
+function render(res, offline){
+  const d = res.data.date, w = res.data.weather, g = res.data.greeting;
+  document.getElementById('d-md').textContent = d.solar.month + '月' + d.solar.day + '日';
+  document.getElementById('d-week').textContent = d.weekday;
+  document.getElementById('d-lunar').textContent = d.solar.year + '年 · 农历' + d.lunar.month_cn + d.lunar.day_cn;
+  document.getElementById('d-ganzhi').textContent = d.lunar.year_cn + '【' + d.lunar.zodiac + '】 · 日柱 ' + d.ganzhi_day;
+
+  const tags = [];
+  (d.festivals||[]).forEach(f => tags.push('<span class="tag festival">'+f+'</span>'));
+  if (d.solar_term) tags.push('<span class="tag term">'+d.solar_term+'</span>');
+  tags.push('<span class="tag '+d.day_type+'">'+d.day_type_label+'</span>');
+  document.getElementById('d-tags').innerHTML = tags.join('');
+
+  if (d.next_solar_term){
+    document.getElementById('d-term').style.display='flex';
+    document.getElementById('d-term-v').textContent = d.next_solar_term.name + ' · ' + d.next_solar_term.days + ' 天后';
+  }
+  if (d.next_holiday){
+    document.getElementById('d-holiday').style.display='flex';
+    document.getElementById('d-holiday-v').textContent = d.next_holiday.name + ' · 还有 ' + d.next_holiday.days + ' 天';
+  }
+
+  document.getElementById('w-emoji').textContent = EMOJI[String(w.icon)] || '🌈';
+  document.getElementById('w-temp').textContent = w.temp;
+  document.getElementById('w-text').textContent = w.text;
+  document.getElementById('w-range').textContent = w.temp_min+'° ~ '+w.temp_max+'° · 体感 '+w.feels_like+'°';
+  document.getElementById('w-city').textContent = w.city;
+  document.getElementById('w-hum').textContent = w.humidity+'%';
+  document.getElementById('w-windk').textContent = w.wind_dir;
+  document.getElementById('w-windv').textContent = w.wind_scale;
+  document.getElementById('w-aqi').textContent = (w.aqi_category||'') + ' ' + (w.aqi||'');
+  document.getElementById('w-tips').textContent = w.tips || '';
+
+  document.getElementById('g-hello').textContent = timeGreeting(new Date().getHours());
+  document.getElementById('g-text').textContent = g.content;
+
+  const deg = res.degraded || [];
+  const map = {database:'数据库未连接', weather:'天气为示例数据'};
+  if (deg.length){
+    document.getElementById('degraded').style.display='flex';
+    document.getElementById('degraded-text').textContent = '降级运行：' + deg.map(k=>map[k]||k).join(' · ');
+  }
+
+  if (offline){
+    const n = document.getElementById('notice');
+    n.className = 'notice show';
+    n.textContent = '后端未启动，当前为内置示例数据';
+  }
+}
+
+async function load(){
+  try {
+    const r = await fetch(API + '/today?city=' + encodeURIComponent(CITY));
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    render(await r.json(), false);
+  } catch(e){
+    render(FALLBACK, true);
+  }
+}
+
+document.getElementById('btn-new').addEventListener('click', async () => {
+  const btn = document.getElementById('btn-new');
+  btn.disabled = true;
+  try {
+    const r = await fetch(API + '/greeting/random?city=' + encodeURIComponent(CITY));
+    if (r.ok){
+      const j = await r.json();
+      document.getElementById('g-text').textContent = j.data.content;
+    }
+  } catch(e){}
+  btn.disabled = false;
+});
+
+load();
+</script>
+</body>
+</html>

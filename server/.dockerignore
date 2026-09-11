@@ -1,0 +1,22 @@
+# 不进镜像的东西。特别注意 .env 必须排除 —— 里面有数据库密码
+.env
+.env.*
+!.env.example
+
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+tests/
+.git/
+.gitignore
+.idea/
+.vscode/
+*.md
+*.log

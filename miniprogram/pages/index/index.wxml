@@ -1,0 +1,94 @@
+<view class="page">
+
+  <!-- 状态提示 -->
+  <view class="notice" wx:if="{{errorText}}">{{errorText}}</view>
+  <view class="notice notice--stale" wx:elif="{{stale}}">正在使用本地缓存数据</view>
+
+  <!-- 一、日期 -->
+  <view class="card card--date">
+    <view class="date-hero">
+      <text class="date-md">{{day.month}}月{{day.day}}日</text>
+      <text class="date-week">{{day.weekday}}</text>
+    </view>
+
+    <view class="date-sub">
+      <text>{{day.year}}年 · 农历{{day.lunarMonthCn}}{{day.lunarDayCn}}</text>
+    </view>
+    <view class="date-sub date-sub--dim">
+      <text>{{day.lunarYearCn}}【{{day.zodiac}}】 · 日柱 {{day.ganzhiDay}}</text>
+    </view>
+
+    <view class="tags">
+      <text class="tag tag--festival" wx:for="{{day.festivals}}" wx:key="*this">{{item}}</text>
+      <text class="tag tag--term" wx:if="{{day.solarTerm}}">{{day.solarTerm}}</text>
+      <text class="tag tag--{{day.dayType}}">{{day.dayTypeLabel}}</text>
+    </view>
+
+    <view class="meta" wx:if="{{day.nextSolarTerm}}">
+      <text class="meta-k">下一节气</text>
+      <text class="meta-v">{{day.nextSolarTerm.name}} · {{day.nextSolarTerm.days}} 天后</text>
+    </view>
+    <view class="meta" wx:if="{{day.nextHoliday}}">
+      <text class="meta-k">假期倒计时</text>
+      <text class="meta-v">{{day.nextHoliday.name}} · 还有 {{day.nextHoliday.days}} 天</text>
+    </view>
+  </view>
+
+  <!-- 二、天气 -->
+  <view class="card card--weather" bindtap="onChooseCity">
+    <view class="w-hero">
+      <text class="w-emoji">{{weather.iconEmoji}}</text>
+      <view class="w-main">
+        <view class="w-line">
+          <text class="w-temp">{{weather.temp}}</text>
+          <text class="w-deg">°</text>
+          <text class="w-text">{{weather.text}}</text>
+        </view>
+        <view class="w-range">
+          {{weather.tempMin}}° ~ {{weather.tempMax}}° · 体感 {{weather.feelsLike}}°
+        </view>
+      </view>
+      <view class="w-city">
+        <text class="w-city-name">{{weather.city}}</text>
+        <text class="w-city-hint">点击切换</text>
+      </view>
+    </view>
+
+    <view class="w-grid">
+      <view class="w-item">
+        <text class="w-k">湿度</text>
+        <text class="w-v">{{weather.humidity}}%</text>
+      </view>
+      <view class="w-item">
+        <text class="w-k">{{weather.windDir}}</text>
+        <text class="w-v">{{weather.windScale}}</text>
+      </view>
+      <view class="w-item" wx:if="{{weather.aqi}}">
+        <text class="w-k">空气</text>
+        <text class="w-v">{{weather.aqiCategory}} {{weather.aqi}}</text>
+      </view>
+    </view>
+
+    <view class="w-tips" wx:if="{{weather.tips}}">{{weather.tips}}</view>
+  </view>
+
+  <!-- 三、敬语 -->
+  <view class="card card--greeting">
+    <view class="g-hello">{{timeGreet}}</view>
+    <view class="g-text">{{greeting.content}}</view>
+    <view class="g-actions">
+      <button class="g-btn" size="mini" loading="{{greetingLoading}}" catchtap="onRefreshGreeting">
+        换一句
+      </button>
+      <button class="g-btn g-btn--plain" size="mini" open-type="share">分享</button>
+    </view>
+  </view>
+
+  <!-- 降级提示 -->
+  <view class="degraded" wx:if="{{degradedText}}">
+    <text class="degraded-dot"></text>
+    <text>降级运行：{{degradedText}}</text>
+  </view>
+
+  <view class="loading" wx:if="{{loading}}">加载中…</view>
+</view>

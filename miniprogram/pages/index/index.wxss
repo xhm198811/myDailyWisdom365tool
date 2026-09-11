@@ -1,0 +1,297 @@
+page {
+  background: #f2f4f7;
+  min-height: 100vh;
+}
+
+.page {
+  padding: 24rpx 24rpx 48rpx;
+  box-sizing: border-box;
+}
+
+/* ---------- 提示条 ---------- */
+.notice {
+  margin-bottom: 16rpx;
+  padding: 16rpx 24rpx;
+  border-radius: 16rpx;
+  background: #fff4e5;
+  color: #a35b00;
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.notice--stale {
+  background: #eef2f7;
+  color: #5f6672;
+}
+
+/* ---------- 卡片通用 ---------- */
+.card {
+  background: #ffffff;
+  border-radius: 28rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 8rpx 32rpx rgba(31, 35, 41, 0.06);
+}
+
+/* ---------- 日期卡 ---------- */
+.card--date {
+  padding-bottom: 28rpx;
+}
+
+.date-hero {
+  display: flex;
+  align-items: baseline;
+  gap: 20rpx;
+}
+
+.date-md {
+  font-size: 76rpx;
+  font-weight: 600;
+  color: #1f2329;
+  line-height: 1.1;
+  letter-spacing: 2rpx;
+}
+
+.date-week {
+  font-size: 30rpx;
+  color: #5f6672;
+}
+
+.date-sub {
+  margin-top: 12rpx;
+  font-size: 28rpx;
+  color: #3d4450;
+  line-height: 1.6;
+}
+
+.date-sub--dim {
+  color: #8f959e;
+  font-size: 26rpx;
+}
+
+.tags {
+  margin-top: 24rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.tag {
+  padding: 8rpx 20rpx;
+  border-radius: 999rpx;
+  font-size: 24rpx;
+  background: #f2f4f7;
+  color: #5f6672;
+}
+
+.tag--festival {
+  background: #fdecec;
+  color: #c0392b;
+}
+
+.tag--term {
+  background: #e7f4ec;
+  color: #2e7d54;
+}
+
+.tag--holiday {
+  background: #fdecec;
+  color: #c0392b;
+}
+
+.tag--makeup_workday {
+  background: #fff3e0;
+  color: #a35b00;
+}
+
+.tag--weekend {
+  background: #e8f0fd;
+  color: #2c5fb3;
+}
+
+.tag--workday {
+  background: #f2f4f7;
+  color: #5f6672;
+}
+
+.meta {
+  margin-top: 18rpx;
+  display: flex;
+  align-items: center;
+  font-size: 26rpx;
+}
+
+.meta-k {
+  color: #8f959e;
+  margin-right: 16rpx;
+  min-width: 130rpx;
+}
+
+.meta-v {
+  color: #3d4450;
+}
+
+/* ---------- 天气卡 ---------- */
+.w-hero {
+  display: flex;
+  align-items: center;
+}
+
+.w-emoji {
+  font-size: 88rpx;
+  line-height: 1;
+  margin-right: 24rpx;
+}
+
+.w-main {
+  flex: 1;
+}
+
+.w-line {
+  display: flex;
+  align-items: baseline;
+  gap: 6rpx;
+}
+
+.w-temp {
+  font-size: 68rpx;
+  font-weight: 600;
+  color: #1f2329;
+  line-height: 1;
+}
+
+.w-deg {
+  font-size: 34rpx;
+  color: #1f2329;
+}
+
+.w-text {
+  font-size: 30rpx;
+  color: #5f6672;
+  margin-left: 16rpx;
+}
+
+.w-range {
+  margin-top: 10rpx;
+  font-size: 26rpx;
+  color: #8f959e;
+}
+
+.w-city {
+  text-align: right;
+}
+
+.w-city-name {
+  display: block;
+  font-size: 28rpx;
+  color: #3d4450;
+}
+
+.w-city-hint {
+  display: block;
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  color: #b0b6bf;
+}
+
+.w-grid {
+  margin-top: 28rpx;
+  padding-top: 24rpx;
+  border-top: 2rpx solid #f2f4f7;
+  display: flex;
+}
+
+.w-item {
+  flex: 1;
+  text-align: center;
+}
+
+.w-k {
+  display: block;
+  font-size: 24rpx;
+  color: #8f959e;
+}
+
+.w-v {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 28rpx;
+  color: #3d4450;
+}
+
+.w-tips {
+  margin-top: 24rpx;
+  padding: 18rpx 22rpx;
+  background: #f7f9fc;
+  border-radius: 16rpx;
+  font-size: 25rpx;
+  color: #5f6672;
+  line-height: 1.6;
+}
+
+/* ---------- 敬语卡 ---------- */
+.card--greeting {
+  background: #fffdf7;
+}
+
+.g-hello {
+  font-size: 26rpx;
+  color: #b08a4a;
+  letter-spacing: 4rpx;
+}
+
+.g-text {
+  margin-top: 16rpx;
+  font-size: 34rpx;
+  line-height: 1.75;
+  color: #2f333a;
+  letter-spacing: 1rpx;
+}
+
+.g-actions {
+  margin-top: 32rpx;
+  display: flex;
+  gap: 20rpx;
+}
+
+.g-btn {
+  flex: 1;
+  margin: 0;
+  font-size: 26rpx;
+  background: #fdf6e8;
+  color: #8a6a33;
+  border: none;
+  border-radius: 999rpx;
+  line-height: 72rpx;
+  height: 72rpx;
+}
+
+.g-btn--plain {
+  background: #ffffff;
+  color: #8a6a33;
+  border: 2rpx solid #ece3d2;
+}
+
+/* ---------- 降级提示 ---------- */
+.degraded {
+  display: flex;
+  align-items: center;
+  padding: 0 8rpx;
+  font-size: 22rpx;
+  color: #a8aeb8;
+}
+
+.degraded-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: #f0a020;
+  margin-right: 12rpx;
+}
+
+.loading {
+  margin-top: 24rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: #a8aeb8;
+}
