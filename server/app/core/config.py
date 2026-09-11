@@ -14,13 +14,15 @@ class Settings(BaseSettings):
     APP_ENV: Literal["dev", "prod"] = "dev"
     API_PREFIX: str = "/api/v1"
 
-    # ---- Supabase Postgres（直连 5432）----
-    SUPABASE_DB_HOST: str = "db.acqnkgbovfhocoqdgtps.supabase.co"
+    # ---- Supabase Postgres（走 Supavisor Session Pooler）----
+    # 默认值即本项目的实际生产参数，避免漏配环境变量时回退到连不通的直连域名：
+    # db.<ref>.supabase.co 只有 AAAA(IPv6) 记录，容器里同样连不上。
+    SUPABASE_DB_HOST: str = "aws-0-ap-southeast-1.pooler.supabase.com"
     SUPABASE_DB_PORT: int = 5432
     SUPABASE_DB_NAME: str = "postgres"
-    SUPABASE_DB_USER: str = "postgres"
+    SUPABASE_DB_USER: str = "postgres.acqnkgbovfhocoqdgtps"
     SUPABASE_DB_PASSWORD: str = ""
-    SUPABASE_DB_SSLMODE: str = "require"  # require | require-no-verify | disable
+    SUPABASE_DB_SSLMODE: str = "require-no-verify"  # require-no-verify | require | disable
 
     # ---- 和风天气 ----
     QWEATHER_API_KEY: str = ""

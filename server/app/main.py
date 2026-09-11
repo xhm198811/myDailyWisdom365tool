@@ -22,6 +22,15 @@ DESCRIPTION = """
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # 把实际读到的配置打出来（不含密码），环境变量漏配/拼错时一眼可见
+    print(
+        "[startup] db config: "
+        f"host={settings.SUPABASE_DB_HOST} port={settings.SUPABASE_DB_PORT} "
+        f"user={settings.SUPABASE_DB_USER} sslmode={settings.SUPABASE_DB_SSLMODE} "
+        f"password={'set' if settings.db_password_set else 'UNSET'} "
+        f"env={settings.APP_ENV}"
+    )
+
     if init_engine():
         try:
             async with session_scope() as s:
@@ -30,7 +39,7 @@ async def lifespan(app: FastAPI):
             print("[startup] database: connected")
         except Exception as exc:  # 连不上就降级，不影响页面
             set_db_available(False)
-            print(f"[startup] database: unavailable, fallback mode ({exc.__class__.__name__})")
+            print(f"[startup] database: unavailable, fallback mode ({exc.__class__.__name__}: {exc})")
     else:
         print("[startup] database: not configured (no password), fallback mode")
 
