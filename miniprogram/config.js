@@ -30,8 +30,8 @@ const CONFIG = {
     channel: 'container',
     apiOrigin: '', // container 模式下不使用
     apiPrefix: '/api/v1',
-    cloudEnv: 'prod-xxxxxxxx', // ← 云托管「环境 ID」，控制台环境概览可查
-    cloudService: 'greeting-api', // ← 云托管「服务名称」，建服务时自己起的名
+    cloudEnv: 'prod-4g0hkmr990e9a01b', // 云托管环境 ID
+    cloudService: 'greeting-api', // ← 云托管「服务名称」，建服务时要起这个名字
     requestTimeout: 10000,
   },
 }
