@@ -72,3 +72,14 @@ async def root():
             f"GET {settings.API_PREFIX}/health",
         ],
     }
+
+
+@app.get("/__tcb_probe__")
+async def tcb_probe():
+    """微信云托管平台健康探测路径。
+
+    平台网关会周期性 GET /__tcb_probe__，返回非 2xx 会被判定为「实例未就绪」，
+    可能导致版本无法正常接流量或实例被反复重启。这里显式返回 200。
+    """
+    return {"ok": True}
+
