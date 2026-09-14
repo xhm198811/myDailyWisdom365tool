@@ -17,7 +17,7 @@ _db_available: bool = False
 
 
 def _ssl_context():
-    mode = (settings.SUPABASE_DB_SSLMODE or "require").lower()
+    mode = (settings.DB_SSLMODE or "require").lower()
     if mode == "disable":
         return None
     ctx = ssl.create_default_context()
@@ -34,10 +34,17 @@ def init_engine() -> bool:
         _db_available = False
         return False
     try:
-        kwargs = {"pool_pre_ping": True, "pool_size": 5, "max_overflow": 5}
+        connect_args: dict = {}
         ssl_ctx = _ssl_context()
         if ssl_ctx is not None:
-            kwargs["connect_args"] = {"ssl": ssl_ctx}
+            connect_args["ssl"] = ssl_ctx
+        if settings.DB_TIMEZONE:
+            # 会话级时区兜底：服务器本身是 UTC 也不会让 timestamptz 判断偏 8 小时
+            connect_args["server_settings"] = {"timezone": settings.DB_TIMEZONE}
+
+        kwargs = {"pool_pre_ping": True, "pool_size": 5, "max_overflow": 5}
+        if connect_args:
+            kwargs["connect_args"] = connect_args
         _engine = create_async_engine(settings.database_url, **kwargs)
         _session_factory = async_sessionmaker(
             _engine, expire_on_commit=False, autoflush=False

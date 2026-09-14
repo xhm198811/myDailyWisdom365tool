@@ -14,7 +14,7 @@ DESCRIPTION = """
 
 - **日期**：公历 / 农历 / 干支生肖 / 二十四节气 / 节假日与调休 / 下一个假期倒计时
 - **天气**：和风天气 devapi，带两级缓存，无 key 时降级 mock
-- **敬语**：Supabase 语料库按场景加权随机
+- **敬语**：PostgreSQL 语料库按场景加权随机
 
 小程序端只需调用 `GET /api/v1/today`。
 """
@@ -25,8 +25,8 @@ async def lifespan(app: FastAPI):
     # 把实际读到的配置打出来（不含密码），环境变量漏配/拼错时一眼可见
     print(
         "[startup] db config: "
-        f"host={settings.SUPABASE_DB_HOST} port={settings.SUPABASE_DB_PORT} "
-        f"user={settings.SUPABASE_DB_USER} sslmode={settings.SUPABASE_DB_SSLMODE} "
+        f"host={settings.DB_HOST} port={settings.DB_PORT} "
+        f"user={settings.DB_USER} sslmode={settings.DB_SSLMODE} "
         f"password={'set' if settings.db_password_set else 'UNSET'} "
         f"env={settings.APP_ENV}"
     )

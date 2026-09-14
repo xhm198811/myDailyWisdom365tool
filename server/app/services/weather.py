@@ -125,6 +125,65 @@ def _is_rainy(icon: str) -> bool:
         return "雨" in str(icon)
 
 
+# ---------------------------------------------------------------------------
+# uapis.cn（免费无 Key）
+# ---------------------------------------------------------------------------
+async def _from_uapis(city: str) -> dict | None:
+    """uapis.cn 适配器。字段较少，缺失项做兜底估算。"""
+    try:
+        async with httpx.AsyncClient(timeout=TIMEOUT) as c:
+            r = await c.get(
+                f"{settings.UAPIS_HOST}/api/v1/misc/weather",
+                params={"city": city},
+            )
+        data = r.json()
+        weather_text = data.get("weather", "")
+        icon = str(data.get("weather_icon", "100"))
+        temp = int(float(data.get("temperature", 0)))
+        humidity = int(data.get("humidity", 0))
+        # uapis 只有当前温度，最高最低按 ±3 粗略估算
+        payload = {
+            "city": data.get("city", city),
+            "text": weather_text,
+            "icon": icon,
+            "temp": temp,
+            "feels_like": temp,  # uapis 不提供体感，等同当前温度
+            "temp_min": temp - 3,
+            "temp_max": temp + 3,
+            "humidity": humidity,
+            "wind_dir": data.get("wind_direction", ""),
+            "wind_scale": data.get("wind_power", ""),
+            "precip": 0.0,
+            "aqi": None,
+            "aqi_category": None,
+            "tips": _uapis_tips(weather_text, temp),
+            "sunrise": "",
+            "sunset": "",
+            "uv_index": "",
+            "is_rainy": "雨" in weather_text,
+            "source": "uapis",
+            "obs_time": "",
+        }
+        return payload
+    except Exception:
+        return None
+
+
+def _uapis_tips(weather: str, temp: int) -> str:
+    """uapis 不返回生活建议，根据天气+温度拼一条。"""
+    if "雨" in weather:
+        return "有雨，出门请带伞。"
+    if "雪" in weather:
+        return "下雪了，注意保暖防滑。"
+    if temp <= 5:
+        return "气温较低，注意添衣保暖。"
+    if temp >= 32:
+        return "天气炎热，注意补水防晒。"
+    if "晴" in weather:
+        return "天气晴好，宜出门走走。"
+    return "今日天气，祝你有个好心情。"
+
+
 async def _from_qweather(city: str, lat: float | None, lon: float | None) -> dict | None:
     if lat is not None and lon is not None:
         loc = f"{lon:.2f},{lat:.2f}"
@@ -242,8 +301,15 @@ async def get_weather(
         return {**cached, "cached": True}
 
     payload = None
-    if settings.QWEATHER_API_KEY:
+    provider = settings.WEATHER_PROVIDER
+    if provider == "auto":
+        provider = "qweather" if settings.QWEATHER_API_KEY else "uapis"
+
+    if provider == "qweather" and settings.QWEATHER_API_KEY:
         payload = await _from_qweather(city, lat, lon)
+    elif provider == "uapis":
+        payload = await _from_uapis(city)
+    # 上两种都失败 → mock
     if payload is None:
         payload = _mock(city, today)
 

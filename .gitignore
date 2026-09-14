@@ -1,6 +1,8 @@
 server/.env
 server/.env.*
 !server/.env.example
+server/db1.txt
+db1.txt                 # 含数据库密码的临时文件（可能出现在项目根目录）
 server/.venv/
 server/venv/
 __pycache__/
@@ -10,3 +12,6 @@ miniprogram/node_modules/
 miniprogram/miniprogram_npm/
 .DS_Store
 Thumbs.db
+# 微信开发者工具本地私有配置
+project.private.config.json
+miniprogram/project.private.config.json
